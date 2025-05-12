@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center bg-white text-black font-serif px-4">
+        <div class="w-full max-w-md space-y-6">
+
+
+            <div class="border p-6 sm:p-8 rounded-md bg-white shadow-md">
+                <h2 class="text-lg text-center mb-6">Login :</h2>
+
+                {% if error %}
+                    <div class="text-red-600 text-sm mb-4 text-center">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-4 text-center text-sm text-gray-600">
+                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-indigo-600 underline">Logout</a>
+                    </div>
+                {% endif %}
+
+                <form method="post" class="space-y-4 sm:space-y-6">
+                    <div>
+                        <label for="inputEmail" class="block mb-1 text-sm sm:text-base">Email :</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                               class="w-full border-b border-black outline-none focus:ring-0 py-1"
+                               autocomplete="email" required autofocus>
+                    </div>
+
+                    <div>
+                        <label for="inputPassword" class="block mb-1 text-sm sm:text-base">Password :</label>
+                        <input type="password" name="password" id="inputPassword"
+                               class="w-full border-b border-black outline-none focus:ring-0 py-1"
+                               autocomplete="current-password" required>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <div class="flex items-center text-sm">
+                        <input type="checkbox" id="remember_me" name="_remember_me" class="mr-2">
+                        <label for="remember_me">Remember me</label>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="bg-gray-800 text-white py-2 px-6 rounded w-full sm:w-auto" type="submit">
+                            Login
+                        </button>
+                    </div>
+                </form>
+
+                <p class="mt-6 text-center text-sm">
+                    Don’t have an account ? →<a href="{{ path('app_register') }}">Register</a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

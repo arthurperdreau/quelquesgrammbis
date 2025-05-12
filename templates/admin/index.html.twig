@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="min-h-screen text-white p-4">
+        <!-- Menu déroulant -->
+        <div class="mb-6">
+            <select id="display-select" class="bg-gray-700 text-white p-2 rounded w-full md:w-1/3">
+                <option value="chart">Graphique des posts</option>
+                <option value="users">Liste des utilisateurs</option>
+            </select>
+        </div>
+
+        <!-- Bloc Graphique -->
+        <div id="chart-block">
+            {{ render_chart(chart, {'class': 'my-chart'}) }}
+        </div>
+
+        <!-- Bloc Utilisateurs -->
+        <div id="users-block" class="hidden">
+            <h3 class="text-2xl font-semibold  text-center">Users</h3>
+
+            <div class="hidden md:block">
+                <table class="min-w-full bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                    <thead class="bg-gray-700 text-gray-300">
+                    <tr>
+                        <th class="px-4 py-3 text-left">ID</th>
+                        <th class="px-4 py-3 text-left">Email</th>
+                        <th class="px-4 py-3 text-left">Rôle</th>
+                        <th class="px-4 py-3 text-left">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr class="border-b border-gray-700 hover:bg-gray-600">
+                            <td class="px-4 py-3">{{ user.id }}</td>
+                            <td class="px-4 py-3">{{ user.email }}</td>
+                            <td class="px-4 py-3 space-x-2">
+                                {% for role in user.roles %}
+                                    {% if role == 'ROLE_USER' %}
+                                        <span class="bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded">User</span>
+                                    {% elseif role == 'ROLE_ADMIN' %}
+                                        <span class="bg-yellow-500 text-gray-900 text-xs font-semibold px-2 py-1 rounded">Admin</span>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if user == app.user %}
+                                    <span class="bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded">C'est vous</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3">
+                                {% if 'ROLE_ADMIN' not in user.roles %}
+                                    <a href="{{ path('promote', {id:user.id}) }}" class="bg-green-500 hover:bg-green-400 text-white px-3 py-1 rounded text-sm font-medium">Promouvoir</a>
+                                {% else %}
+                                    <a href="{{ path('demote', {id:user.id}) }}" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-sm font-medium">Rétrograder</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Cartes mobiles -->
+            <div class="space-y-4 md:hidden ">
+                {% for user in users %}
+                    <div class="bg-gray-800 rounded-lg p-4 shadow-md">
+                        <p class="text-sm"><span class="font-semibold text-gray-300">ID:</span> {{ user.id }}</p>
+                        <p class="text-sm"><span class="font-semibold text-gray-300">Email:</span> {{ user.email }}</p>
+                        <div class="text-sm mt-2 space-x-1">
+                            {% for role in user.roles %}
+                                {% if role == 'ROLE_USER' %}
+                                    <span class="bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded">User</span>
+                                {% elseif role == 'ROLE_ADMIN' %}
+                                    <span class="bg-yellow-500 text-gray-900 text-xs font-semibold px-2 py-1 rounded">Admin</span>
+                                {% endif %}
+                            {% endfor %}
+                            {% if user == app.user %}
+                                <span class="bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded">C'est vous</span>
+                            {% endif %}
+                        </div>
+                        <div class="mt-3">
+                            {% if 'ROLE_ADMIN' not in user.roles %}
+                                <a href="{{ path('promote', {id:user.id}) }}" class="bg-green-500 hover:bg-green-400 text-white px-3 py-1 rounded text-sm font-medium">Promouvoir</a>
+                            {% else %}
+                                <a href="{{ path('demote', {id:user.id}) }}" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-sm font-medium">Rétrograder</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript pour bascule -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const select = document.getElementById('display-select');
+            const chartBlock = document.getElementById('chart-block');
+            const usersBlock = document.getElementById('users-block');
+
+            select.addEventListener('change', function () {
+                if (this.value === 'chart') {
+                    chartBlock.classList.remove('hidden');
+                    usersBlock.classList.add('hidden');
+                } else {
+                    usersBlock.classList.remove('hidden');
+                    chartBlock.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+{% endblock %}

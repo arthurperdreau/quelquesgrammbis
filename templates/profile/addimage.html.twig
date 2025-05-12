@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une image de profil{% endblock %}
+
+{% block body %}
+    <a class="btn py-1 px-4 text-2xl" href="{{ path('app_myposts') }}">
+        <i class="bi bi-caret-left-fill"></i>
+    </a>
+    <div class="min-h-screen p-6 text-white  flex flex-col items-center space-y-8">
+
+        {% if app.user.profile.picture %}
+            <div class="relative bg-gray-800 rounded-xl shadow-lg overflow-hidden w-64">
+                <img class="w-full h-64 object-cover" src="{{ vich_uploader_asset(app.user.profile.picture, 'imageFile') }}" alt="Image de profil">
+
+                <!-- Bouton supprimer -->
+                <a href="{{ path('add_removepictureprofile', {id: app.user.profile.picture.id}) }}"
+                   class="absolute top-2 right-2 bg-red-600 hover:bg-red-500 text-white rounded-full p-2 text-sm transition duration-200"
+                   title="Supprimer l'image">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        {% endif %}
+
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
+            <h3 class="text-xl font-semibold text-center">Ajouter une nouvelle image</h3>
+            {{ form_start(form) }}
+            <div class="mb-4">
+                {{ form_row(form.imageFile, {'attr': {'class': 'w-full text-white bg-gray-700 border border-gray-600 rounded p-2'}}) }}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded font-semibold">
+                    Ajouter
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+
+    </div>
+{% endblock %}

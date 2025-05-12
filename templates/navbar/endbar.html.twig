@@ -1,0 +1,26 @@
+<div class="fixed bottom-0 left-0 right-0 bg-gray-800 text-white flex justify-around items-center py-3 shadow-inner z-50">
+    <a href="{{ path('app_posts') }}">
+        <i class="bi bi-house-fill text-2xl hover:text-blue-400 cursor-pointer"></i>
+    </a>
+    <a href="{{ path('app_search_post') }}">
+    <i class="bi bi-search text-2xl hover:text-green-400 cursor-pointer"></i>
+    </a>
+
+    <a href="{{ path('app_new_post') }}">
+        <i class="bi bi-plus-circle-fill text-3xl hover:text-yellow-400 cursor-pointer"></i>
+    </a>
+
+    <i class="bi bi-bell-fill text-2xl hover:text-pink-400 cursor-pointer"></i>
+
+    <a href="{{ path('app_myposts') }}">
+        {% if app.user and app.user.profile.picture %}
+            <img src="{{ vich_uploader_asset(app.user.profile.picture, 'imageFile') }}"
+                 alt="My profile"
+                 class="w-8 h-8 rounded-full object-cover border-2 border-white-500 hover:scale-105 transition-transform">
+        {% else %}
+            <img src="/imagesSite/img.png"
+                 alt="Default profile"
+                 class="w-8 h-8 rounded-full object-cover border-2 border-gray-500 hover:scale-105 transition-transform">
+        {% endif %}
+    </a>
+</div>

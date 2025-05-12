@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Faire un don{% endblock %}
+
+{% block body %}
+    <div class="text-center mt-10">
+        <h1 class="text-2xl font-bold mb-4">Faire un don de 1 $</h1>
+        <button id="donate-button" class="bg-blue-600 text-white px-4 py-2 rounded">Donner 1 $</button>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stripe = Stripe('{{ stripe_public_key }}');
+
+            document.getElementById('donate-button').addEventListener('click', function () {
+                fetch('/create-checkout-session', {
+                    method: 'POST',
+                })
+                    .then(response => response.json())
+                    .then(session => {
+                        return stripe.redirectToCheckout({ sessionId: session.id });
+                    })
+                    .catch(error => console.error('Erreur:', error));
+            });
+        });
+    </script>
+{% endblock %}

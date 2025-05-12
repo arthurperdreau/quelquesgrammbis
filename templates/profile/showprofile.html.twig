@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{ profile.displayname }}{% endblock %}
+
+{% block body %}
+    <a class="btn py-1 px-4 text-2xl" href="{{ path('app_posts') }}">
+        <i class="bi bi-caret-left-fill"></i>
+    </a>
+    <div class="max-w-xl mx-auto px-4 py-10 ">
+        <div class="bg-gray-800 rounded-2xl shadow-lg overflow-hidden flex flex-col w-full pt-2 pb-3">
+
+            <div class="flex items-center gap-6 px-6 py-6 border-b border-gray-700">
+                {% if profile.picture %}
+                    <img src="{{ vich_uploader_asset(profile.picture, 'imageFile') }}"
+                         alt="Image de profil"
+                         class="w-24 h-24 rounded-full object-cover border-4 border-gray-600 shadow">
+                {% else %}
+                    <img src="/imagesSite/img.png"
+                         alt="Image par défaut"
+                         class="w-24 h-24 rounded-full object-cover border-4 border-gray-600 shadow">
+                {% endif %}
+
+                <div>
+                    <h1 class="text-white text-2xl font-bold">{{ profile.displayname }}</h1>
+                    <p class="text-gray-400 text-sm">{{ app.user.email }}</p>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4 text-gray-300 text-sm">
+                <p><span class="font-semibold text-white">Bio :</span> {% if profile.bio %} {{ profile.bio }} {% else%} No bio at the moment {% endif %}</p>
+            </div>
+
+
+            <div class="px-6 pb-6 mb-4">
+                {% if not app.user.profile.isFriendsWith(profile) and not app.user.profile.isPendingFriendRequest(profile) %}
+                <a href="{{ path('app_send_friend_request', { id:profile.id}) }}" class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600 transition">
+                    Ajouter en ami
+                </a>
+                {% else %}
+                    <a href="{{ path('app_send_friend_request', { id:profile.id}) }}" class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600 transition" >
+                        I'm your friend
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

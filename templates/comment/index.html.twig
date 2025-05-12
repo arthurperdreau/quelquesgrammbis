@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CommentController!{% endblock %}
+
+{% block body %}
+    <a class="btn py-1 px-4 text-2xl" href="{{ path('app_posts') }}">
+        <i class="bi bi-caret-left-fill"></i>
+    </a>
+
+    <div class="max-w-xl mx-auto p-4 bg-white rounded shadow-sm">
+
+        <h2 class="text-xl font-semibold mb-4">Commentaires</h2>
+
+        {% for comment in post.comments %}
+            <div class="flex items-start justify-between space-x-3 mb-4">
+                <div class="flex items-start space-x-3">
+                    <div class="flex-shrink-0">
+                        <img class="w-8 h-8 rounded-full bg-gray-300" src="https://via.placeholder.com/32" alt="">
+                    </div>
+                    <div>
+                        <p>
+                            <span class="font-semibold mr-2">{{ comment.author.email }}</span>
+                            {{ comment.content }}
+                        </p>
+                    </div>
+                </div>
+                <div class="flex space-x-2 text-gray-500">
+                    <a href="{{ path('app_edit_comment', {id:comment.id}) }}" class="hover:text-blue-600" >
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a href="{{ path('app_delete_comment', {id:comment.id}) }}">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-gray-500">Aucun commentaire pour le moment.</p>
+        {% endfor %}
+
+        <div class="border-t pt-4 mt-4">
+            {{ form_start(form, {'action': path('app_new_comment', {id: post.id}), 'method': 'POST'}) }}
+            <div class="flex items-center space-x-2">
+                {{ form_row(form.content, {
+                    'label': false,
+                    'attr': {
+                        'placeholder': 'Ajouter un commentaire...',
+                        'class': 'form-control flex-1 rounded-lg border-gray-300 border p-1'
+                    }
+                }) }}
+                <button type="submit" class="btn font-semibold  ">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

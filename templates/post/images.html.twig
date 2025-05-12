@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a class="btn py-1 px-4 text-2xl" href="{{ path('app_posts') }}">
+        <i class="bi bi-caret-left-fill"></i>
+    </a>
+    <div class="min-h-screen text-white p-6">
+
+        <!-- Bouton retour -->
+        <a href="{{ path('app_posts') }}" class="inline-flex items-center text-white text-2xl hover:text-blue-400 mb-6">
+            <i class="bi bi-arrow-left"></i>
+            <span class="ml-2">Retour</span>
+        </a>
+
+        <!-- Galerie d'images -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+            {% for image in post.images %}
+                <div class="relative bg-gray-800 rounded-xl shadow-lg overflow-hidden group">
+                    <!-- Bouton Supprimer -->
+                    <a href="{{ path('remove_image', {id:image.id}) }}"
+                       class="absolute top-2 right-2 bg-red-600 hover:bg-red-500 text-white rounded-full p-1 text-sm z-10 transition duration-200"
+                       title="Supprimer l'image">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+
+                    <!-- Image -->
+                    <img src="{{ vich_uploader_asset(image, "imageFile") }}"
+                         alt="Image du post"
+                         class="w-full h-48 object-cover rounded-xl">
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Ajout d'image -->
+        <div class="bg-gray-800 rounded-xl p-6 shadow-lg max-w-xl mx-auto">
+            <h3 class="text-lg font-semibold mb-4 text-center">Ajouter une nouvelle image</h3>
+            {{ form_start(form) }}
+            <div class="mb-4">
+                {{ form_row(form.imageFile, {'attr': {'class': 'w-full text-white rounded'}}) }}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded">
+                    Ajouter
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+    </div>
+{% endblock %}

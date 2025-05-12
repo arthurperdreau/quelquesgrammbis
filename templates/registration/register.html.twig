@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="min-h-screen flex items-center justify-center bg-white text-black font-serif px-4">
+        <div class="w-full max-w-md space-y-6">
+
+
+            <div class="border p-6 sm:p-8 rounded-md bg-white shadow-md">
+                <h2 class="text-lg text-center mb-6">Register :</h2>
+
+                {{ form_start(registrationForm) }}
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.email, 'Email :', {'label_attr': {'class': 'block mb-1 text-sm sm:text-base'}}) }}
+                    {{ form_widget(registrationForm.email, {
+                        'attr': {
+                            'class': 'w-full border-b border-black outline-none focus:ring-0 py-1'
+                        }
+                    }) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(registrationForm.plainPassword, 'Password :', {'label_attr': {'class': 'block mb-1 text-sm sm:text-base'}}) }}
+                    {{ form_widget(registrationForm.plainPassword, {
+                        'attr': {
+                            'class': 'w-full border-b border-black outline-none focus:ring-0 py-1'
+                        }
+                    }) }}
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+
+                <div class="mb-6 flex items-center text-sm">
+                    {{ form_widget(registrationForm.agreeTerms, {
+                        'attr': { 'class': 'mr-2' }
+                    }) }}
+                    {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'inline'}}) }}
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="bg-gray-800 text-white py-2 px-6 rounded w-full sm:w-auto">
+                        Register
+                    </button>
+                </div>
+
+                {{ form_end(registrationForm) }}
+
+                <p class="mt-6 text-center text-sm">
+                    Already have an account ? → <a href="{{ path('app_login') }}">Log in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

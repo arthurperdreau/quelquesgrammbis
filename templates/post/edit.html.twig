@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a class="btn py-1 px-4 text-2xl" href="{{ path('app_myposts') }}">
+        <i class="bi bi-caret-left-fill"></i>
+    </a>
+    <div class="flex justify-center p-4">
+        <div class="bg-gray-800 text-white w-full max-w-md rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4 text-center">Edit Post</h2>
+
+            {{ form_start(form) }}
+
+            <div class="mb-4">
+                {{ form_label(form.title, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-300'}}) }}
+                {{ form_widget(form.title, {'attr': {'class': 'w-full mt-1 p-2 bg-gray-700 border border-gray-600 rounded text-white'}}) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="mb-6">
+                {{ form_label(form.description, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-300'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'w-full mt-1 p-2 bg-gray-700 border border-gray-600 rounded text-white'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded">
+                Post
+            </button>
+
+            {{ form_end(form) }}
+            <a href="{{ path('post_image', {id: post.id}) }}"
+               class="mt-4 inline-flex items-center justify-center w-full bg-yellow-600 hover:bg-yellow-500 text-white font-semibold py-2 px-4 rounded transition duration-200">
+                <i class="bi bi-images mr-2"></i> Manage Images
+            </a>
+        </div>
+    </div>
+{% endblock %}
