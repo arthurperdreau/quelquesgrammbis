@@ -100,6 +100,12 @@ final class PostController extends AbstractController
             }
         }
 
+        if($post->getLikes()->count() > 0){
+            foreach ($post->getLikes() as $like) {
+                $manager->remove($like);
+            }
+        }
+
         $manager->remove($post);
         $manager->flush();
 
