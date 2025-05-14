@@ -14,6 +14,7 @@
 
         <div id="profile-block">
             <div class="max-w-3xl mx-auto bg-gray-900 p-6 rounded-2xl shadow-xl space-y-6">
+                <!-- Profile Header -->
                 <div class="flex items-center gap-6">
                     {% if app.user.profile.picture %}
                         <img src="{{ vich_uploader_asset(app.user.profile.picture, 'imageFile') }}"
@@ -31,6 +32,7 @@
                     </div>
                 </div>
 
+                <!-- Edit Profile -->
                 <div class="bg-gray-800 p-4 rounded-lg shadow-inner space-y-4">
                     <h3 class="text-lg font-semibold text-white">Edit Profile</h3>
                     {{ form_start(form, {'attr': {'class': 'flex flex-col gap-6'}}) }}
@@ -61,10 +63,11 @@
                     </div>
                 </div>
 
-
+                <!-- Sent Friend Requests -->
                 <div class="bg-gray-800 p-6 rounded-xl shadow-lg mt-6 space-y-6">
-
-                    <h3 class="text-xl font-bold text-white mb-2">📤 My Sent Friend Requests</h3>
+                    <h3 class="text-xl font-bold text-white mb-2">
+                        <i class="bi bi-arrow-right-circle-fill text-blue-400"></i> My Sent Friend Requests
+                    </h3>
                     <div class="space-y-3">
                         {% for sentRequest in app.user.profile.sentFriendRequests %}
                             <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-700 p-4 rounded-lg shadow-sm">
@@ -84,7 +87,10 @@
                         {% endfor %}
                     </div>
 
-                    <h3 class="text-xl font-bold text-white mt-8 mb-2">📥 People Requesting My Friendship</h3>
+                    <!-- Received Friend Requests -->
+                    <h3 class="text-xl font-bold text-white mt-8 mb-2">
+                        <i class="bi bi-arrow-down-circle-fill text-green-400"></i> People Requesting My Friendship
+                    </h3>
                     <div class="space-y-3">
                         {% for receivedRequest in app.user.profile.receiveFriendRequests %}
                             <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-700 p-4 rounded-lg shadow-sm">
@@ -115,13 +121,23 @@
                     </div>
 
                     <!-- Friends List -->
-                    <h3 class="text-xl font-bold text-white mt-8 mb-2">👫 My Friends</h3>
+                    <h3 class="text-xl font-bold text-white mt-8 mb-2">
+                        <i class="bi bi-person-lines-fill text-purple-400"></i> My Friends
+                    </h3>
                     <div class="space-y-3">
                         {% for friend in app.user.profile.getFriends() %}
-                            <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-700 p-4 rounded-lg shadow-sm">
-                                <div class="flex items-center gap-3 w-full sm:w-auto">
+                            <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-700 p-4 rounded-lg shadow-md">
+                                <div class="flex items-center gap-4 w-full sm:w-auto">
                                     <i class="bi bi-person-fill text-purple-400 text-xl"></i>
-                                    <p class="text-white font-medium">{{ friend.ofUser.email }}</p>
+                                    <div>
+                                        <p class="text-white font-medium">{{ friend.ofUser.email }}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 sm:mt-0">
+                                    <a href="{{ path('app_chat_create', {id: friend.id}) }}"
+                                       class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-sm flex items-center gap-2">
+                                        <i class="bi bi-chat-dots"></i> Chat
+                                    </a>
                                 </div>
                             </div>
                         {% else %}
@@ -129,17 +145,43 @@
                         {% endfor %}
                     </div>
 
+                    <!-- My Chats -->
+                    <h3 class="text-xl font-bold text-white mt-8 mb-2">
+                        <i class="bi bi-chat-left-text-fill text-indigo-400"></i> My Conversations
+                    </h3>
+                    <div class="space-y-3">
+                        {% if app.user.profile.conversations|length > 0 %}
+                            {% for chat in app.user.profile.conversations %}
+                                <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-700 p-4 rounded-lg shadow-md">
+                                    <div class="flex items-center gap-3">
+                                        {% for participant in chat.participants %}
+                                            {% if participant != app.user.profile %}
+                                                <span class="text-white font-medium">{{ participant.ofUser.email }}</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="mt-4 sm:mt-0">
+                                        <a href="{{ path('app_chat', {id:chat.id}) }}"
+                                           class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow text-sm flex items-center gap-2">
+                                            <i class="bi bi-chat-fill"></i> Open Chat
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-gray-400 italic">You have no conversations yet.</p>
+                        {% endif %}
+                    </div>
                 </div>
-
             </div>
         </div>
 
+        <!-- Posts Block -->
         <div id="posts-block" class="hidden">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto mt-6">
                 {% for post in myposts %}
                     <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col w-full max-w-sm mx-auto">
 
-                        <!-- Header -->
                         <div class="p-2 px-4 flex-grow flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 {% if post.author.profile and post.author.profile.picture %}
@@ -164,10 +206,7 @@
                             {% for image in post.images %}
                                 <img src="{{ vich_uploader_asset(image, "imageFile") }}" alt="Post Image" class="w-full h-48 object-cover">
                             {% endfor %}
-                        {% else %}
-                            <img src="https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg"
-                                 alt="Default Post Image"
-                                 class="w-full h-48 object-cover">
+
                         {% endif %}
 
                         <div class="p-2 px-4 flex-grow">
@@ -186,13 +225,19 @@
                                 <i class="bi bi-trash-fill hover:text-red-400 cursor-pointer"></i>
                             </a>
                         </div>
+
                     </div>
+                {% else %}
+                    <p class="text-gray-400 text-center italic">No posts available yet.</p>
                 {% endfor %}
             </div>
         </div>
+
     </div>
 
-    <script>
+
+
+<script>
         document.addEventListener('DOMContentLoaded', function () {
             const select = document.getElementById('section-select');
             const profileBlock = document.getElementById('profile-block');

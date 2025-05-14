@@ -37,9 +37,13 @@
                     Ajouter en ami
                 </a>
                 {% else %}
-                    <a href="{{ path('app_send_friend_request', { id:profile.id}) }}" class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600 transition" >
+                    <a href="{{ path('app_send_friend_request', { id: profile.id }) }}"
+                       class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-600 transition cursor-not-allowed opacity-50"
+
+                       aria-disabled="true">
                         I'm your friend
                     </a>
+
                 {% endif %}
             </div>
         </div>

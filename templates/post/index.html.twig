@@ -35,10 +35,7 @@
                     {% for image in post.images %}
                         <img src="{{ vich_uploader_asset(image, "imageFile") }}" alt="" class="w-full h-48 object-cover">
                     {% endfor %}
-                {% else %}
-                    <img src="https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg"
-                         alt="Post Image"
-                         class="w-full h-48 object-cover">
+
                 {% endif %}
 
                 <!-- Contenu du post -->
