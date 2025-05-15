@@ -51,11 +51,18 @@ class Post
     #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'post')]
     private Collection $likes;
 
+    /**
+     * @var Collection<int, Share>
+     */
+    #[ORM\OneToMany(targetEntity: Share::class, mappedBy: 'sharedPost')]
+    private Collection $shares;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->shares = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -209,5 +216,35 @@ class Post
             }
         }
         return false;
+    }
+
+    /**
+     * @return Collection<int, Share>
+     */
+    public function getShares(): Collection
+    {
+        return $this->shares;
+    }
+
+    public function addShare(Share $share): static
+    {
+        if (!$this->shares->contains($share)) {
+            $this->shares->add($share);
+            $share->setSharedPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShare(Share $share): static
+    {
+        if ($this->shares->removeElement($share)) {
+            // set the owning side to null (unless already changed)
+            if ($share->getSharedPost() === $this) {
+                $share->setSharedPost(null);
+            }
+        }
+
+        return $this;
     }
 }

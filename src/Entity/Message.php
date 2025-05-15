@@ -27,6 +27,9 @@ class Message
     #[ORM\JoinColumn(nullable: false)]
     private ?Conversation $conversation = null;
 
+    #[ORM\Column]
+    private ?int $type = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,18 @@ class Message
     public function setConversation(?Conversation $conversation): static
     {
         $this->conversation = $conversation;
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

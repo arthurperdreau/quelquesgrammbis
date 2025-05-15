@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Share Post{% endblock %}
+
+{% block body %}
+    <a class="btn py-1 px-4 text-2xl" href="{{ path('app_posts') }}">
+        <i class="bi bi-caret-left-fill"></i>
+    </a>
+    <div class="min-h-screen  p-6">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-3xl font-bold mb-6 text-center">Share this Post</h1>
+
+            <div class="space-y-4">
+                {% for friend in app.user.profile.getFriends() %}
+                    <div class="bg-gray-800 p-4 rounded-lg shadow flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <i class="bi bi-person-fill text-blue-400 text-2xl"></i>
+                            <p class="text-white text-lg font-medium">{{ friend.ofUser.email }}</p>
+                        </div>
+                        <a href="{{ path('app_share', { id: post.id, recipientId: friend.id }) }}"
+                           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-sm flex items-center gap-2">
+                            <i class="bi bi-share-fill"></i> Share
+                        </a>
+                    </div>
+                {% else %}
+                    <p class="text-gray-400 italic text-center">You don't have any friends to share this post with.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

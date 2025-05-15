@@ -54,6 +54,7 @@ final class ChatController extends AbstractController
             $message->setAuthor($this->getUser()->getProfile());
             $message->setConversation($chat);
             $message->setCreatedAt(new \DateTimeImmutable());
+            $message->setType(1);
             $manager->persist($message);
             $manager->flush();
             return $this->redirectToRoute('app_chat', ['id' => $chat->getId()]);

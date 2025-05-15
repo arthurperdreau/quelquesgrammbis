@@ -64,6 +64,18 @@ class Profile
     #[ORM\ManyToMany(targetEntity: Conversation::class, mappedBy: 'participants')]
     private Collection $conversations;
 
+    /**
+     * @var Collection<int, Share>
+     */
+    #[ORM\OneToMany(targetEntity: Share::class, mappedBy: 'sender')]
+    private Collection $sharesProfile;
+
+    /**
+     * @var Collection<int, Share>
+     */
+    #[ORM\OneToMany(targetEntity: Share::class, mappedBy: 'recipient')]
+    private Collection $sharesRecipient;
+
 
     public function __construct()
     {
@@ -73,6 +85,8 @@ class Profile
         $this->receiveFriendRequests = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->conversations = new ArrayCollection();
+        $this->sharesProfile = new ArrayCollection();
+        $this->sharesRecipient = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -355,6 +369,66 @@ class Profile
             }
         }
         return false;
+    }
+
+    /**
+     * @return Collection<int, Share>
+     */
+    public function getSharesProfile(): Collection
+    {
+        return $this->sharesProfile;
+    }
+
+    public function addSharesProfile(Share $sharesProfile): static
+    {
+        if (!$this->sharesProfile->contains($sharesProfile)) {
+            $this->sharesProfile->add($sharesProfile);
+            $sharesProfile->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharesProfile(Share $sharesProfile): static
+    {
+        if ($this->sharesProfile->removeElement($sharesProfile)) {
+            // set the owning side to null (unless already changed)
+            if ($sharesProfile->getSender() === $this) {
+                $sharesProfile->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Share>
+     */
+    public function getSharesRecipient(): Collection
+    {
+        return $this->sharesRecipient;
+    }
+
+    public function addSharesRecipient(Share $sharesRecipient): static
+    {
+        if (!$this->sharesRecipient->contains($sharesRecipient)) {
+            $this->sharesRecipient->add($sharesRecipient);
+            $sharesRecipient->setRecipient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharesRecipient(Share $sharesRecipient): static
+    {
+        if ($this->sharesRecipient->removeElement($sharesRecipient)) {
+            // set the owning side to null (unless already changed)
+            if ($sharesRecipient->getRecipient() === $this) {
+                $sharesRecipient->setRecipient(null);
+            }
+        }
+
+        return $this;
     }
 
 }
