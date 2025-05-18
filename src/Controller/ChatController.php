@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Conversation;
 use App\Entity\Message;
+use App\Entity\Notification;
 use App\Entity\Profile;
 use App\Form\MessageForm;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\DocBlock\Tags\Factory\VarFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,6 +58,24 @@ final class ChatController extends AbstractController
             $message->setCreatedAt(new \DateTimeImmutable());
             $message->setType(1);
             $manager->persist($message);
+
+            $recipient=null;
+            foreach ($chat->getParticipants() as $participant) {
+                if($participant != $this->getUser()->getProfile()) {
+
+                    $recipient = $participant;
+                }
+            }
+
+
+            $notif=new Notification();
+            $notif->setType(3);
+            $notif->setNotifMessage($message);
+            $notif->setNotified($recipient);
+            $notif->setCreatedAt(new \DateTimeImmutable());
+            $notif->setSeen(false);
+            $manager->persist($notif);
+
             $manager->flush();
             return $this->redirectToRoute('app_chat', ['id' => $chat->getId()]);
         }

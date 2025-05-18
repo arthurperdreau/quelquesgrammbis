@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\FriendRequest;
 use App\Entity\Friendship;
+use App\Entity\Notification;
 use App\Entity\Profile;
 use App\Repository\FriendRequestRepository;
 use App\Repository\FriendshipRepository;
@@ -26,6 +27,14 @@ final class FriendController extends AbstractController
         {
             $friendRequest->setCreatedAt(new \DateTimeImmutable());
             $manager->persist($friendRequest);
+
+            $notif=new Notification();
+            $notif->setType(4);
+            $notif->setNotifFriendRequest($friendRequest);
+            $notif->setNotified($recipent);
+            $notif->setCreatedAt(new \DateTimeImmutable());
+            $notif->setSeen(false);
+            $manager->persist($notif);
             $manager->flush();
 
         }

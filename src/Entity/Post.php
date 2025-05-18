@@ -57,12 +57,21 @@ class Post
     #[ORM\OneToMany(targetEntity: Share::class, mappedBy: 'sharedPost')]
     private Collection $shares;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'notifPost')]
+    private Collection $notifications;
+
+
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->shares = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -242,6 +251,58 @@ class Post
             // set the owning side to null (unless already changed)
             if ($share->getSharedPost() === $this) {
                 $share->setSharedPost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getNotification(): ?Notification
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(?Notification $notification): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($notification === null && $this->notification !== null) {
+            $this->notification->setNotifPost(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($notification !== null && $notification->getNotifPost() !== $this) {
+            $notification->setNotifPost($this);
+        }
+
+        $this->notification = $notification;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setNotifPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getNotifPost() === $this) {
+                $notification->setNotifPost(null);
             }
         }
 

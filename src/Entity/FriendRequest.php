@@ -22,6 +22,9 @@ class FriendRequest
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToOne(mappedBy: 'notifFriendRequest', cascade: ['persist', 'remove'])]
+    private ?Notification $notification = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,28 @@ class FriendRequest
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getNotification(): ?Notification
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(?Notification $notification): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($notification === null && $this->notification !== null) {
+            $this->notification->setNotifFriendRequest(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($notification !== null && $notification->getNotifFriendRequest() !== $this) {
+            $notification->setNotifFriendRequest($this);
+        }
+
+        $this->notification = $notification;
 
         return $this;
     }

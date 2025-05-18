@@ -20,6 +20,9 @@ class Like
     #[ORM\ManyToOne(inversedBy: 'likes')]
     private ?Post $post = null;
 
+    #[ORM\OneToOne(mappedBy: 'notifLike', cascade: ['persist', 'remove'])]
+    private ?Notification $notification = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,28 @@ class Like
     public function setPost(?Post $post): static
     {
         $this->post = $post;
+
+        return $this;
+    }
+
+    public function getNotification(): ?Notification
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(?Notification $notification): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($notification === null && $this->notification !== null) {
+            $this->notification->setNotifLike(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($notification !== null && $notification->getNotifLike() !== $this) {
+            $notification->setNotifLike($this);
+        }
+
+        $this->notification = $notification;
 
         return $this;
     }

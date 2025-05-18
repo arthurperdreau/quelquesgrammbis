@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Image;
+use App\Entity\Notification;
 use App\Entity\Post;
 use App\Form\ImageForm;
 use App\Form\PostForm;
@@ -69,6 +70,15 @@ final class PostController extends AbstractController
             $post->setAuthor($this->getUser());
             $post->setCreatedAt(new \DateTimeImmutable());
             $manager->persist($post);
+            foreach ($this->getUser()->getProfile()->getFriends() as $friend) {
+                $notif=new Notification();
+                $notif->setType(1);
+                $notif->setNotifPost($post);
+                $notif->setNotified($friend);
+                $notif->setCreatedAt(new \DateTimeImmutable());
+                $notif->setSeen(false);
+                $manager->persist($notif);
+            }
             $manager->flush();
 
             return $this->redirectToRoute('app_posts',);

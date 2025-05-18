@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Conversation;
 use App\Entity\Message;
+use App\Entity\Notification;
 use App\Entity\Post;
 use App\Entity\Profile;
 use App\Entity\Share;
@@ -66,6 +67,9 @@ final class ShareController extends AbstractController
         $message->setCreatedAt(new \DateTimeImmutable());
         $message->setType(2);
         $manager->persist($message);
+
+
+
         $manager->flush();
         return $this->redirectToRoute('app_share_post', ['id' => $post->getId()]);
 

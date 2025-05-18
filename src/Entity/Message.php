@@ -30,6 +30,9 @@ class Message
     #[ORM\Column]
     private ?int $type = null;
 
+    #[ORM\OneToOne(mappedBy: 'notifMessage', cascade: ['persist', 'remove'])]
+    private ?Notification $notification = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +94,28 @@ class Message
     public function setType(int $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getNotification(): ?Notification
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(?Notification $notification): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($notification === null && $this->notification !== null) {
+            $this->notification->setNotifMessage(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($notification !== null && $notification->getNotifMessage() !== $this) {
+            $notification->setNotifMessage($this);
+        }
+
+        $this->notification = $notification;
 
         return $this;
     }
