@@ -7,30 +7,41 @@
         <i class="bi bi-caret-left-fill"></i>
     </a>
     <div class="min-h-screen   p-6">
-        <h1 class="text-2xl font-bold mb-6"><i class="bi bi-chat-dots-fill text-green-400"></i> Chat Room</h1>
+        <h1 class="text-2xl font-bold mb-6"><i class="bi bi-chat-dots-fill text-blue-500"></i> Chat Room</h1>
 
-        <div class="bg-gray-800 rounded-xl shadow-lg p-4 space-y-4 max-w-4xl mx-auto overflow-y-auto max-h-[70vh] border border-gray-700">
+        <div class=" rounded-xl shadow-lg p-4 space-y-4 max-w-4xl mx-auto overflow-y-auto max-h-[70vh] ">
             {% for message in chat.messages %}
-                <div class="bg-gray-700 p-3 rounded-lg shadow-sm">
-                    <p class="text-sm text-gray-400 mb-1">
-                        <i class="bi bi-clock"></i> {{ message.createdAt|date('H:i') }}
-                        &mdash; <i class="bi bi-person-circle text-blue-400"></i>
-                        <span class="font-medium text-white">{{ message.author.ofUser.email }}</span>
-                    </p>
-                    {% if message.type == 1 %}
-                        <p class="text-white">{{ message.content }}</p>
-                    {% elseif message.type == 2 %}
-                        <a class="text-blue-400 hover:underline hover:text-blue-300 transition flex items-center gap-1" href="{{ path('post_show', {id: message.content}) }}">
-                            <i class="bi bi-share-fill"></i> View shared post #{{ message.content }}
-                        </a>
-                    {% else %}
-                        <p class="text-white">{{ message.content }}</p>
-                    {% endif %}
+                {% set isMine = message.author.ofUser == app.user %}
 
+                <div class="flex {{ isMine ? 'justify-end' : 'justify-start' }}">
+                    <div class="p-3 rounded-lg shadow-sm max-w-[80%] md:max-w-[60%]
+            {{ isMine ? 'bg-blue-500 text-white text-right ml-auto'
+                    : 'bg-gray-700 text-white'
+                    }}">
+
+                        <p class="text-xs text-gray-300 mb-1">
+                            <i class="bi bi-clock"></i> {{ message.createdAt|date('H:i') }}
+                            {% if not isMine %}
+                                &mdash; <i class="bi bi-person-circle text-blue-400"></i>
+                                <span class="font-medium">{{ message.author.ofUser.email }}</span>
+                            {% endif %}
+                        </p>
+
+                        {% if message.type == 1 %}
+                            <p class="whitespace-pre-line break-words">{{ message.content }}</p>
+                        {% elseif message.type == 2 %}
+                            <a class="text-blue-300 hover:underline flex items-center gap-1 {{ isMine ? 'justify-end' : 'justify-start' }}" href="{{ path('post_show', {id: message.content}) }}">
+                                <i class="bi bi-share-fill"></i> View shared post #{{ message.content }}
+                            </a>
+                        {% else %}
+                            <p>{{ message.content }}</p>
+                        {% endif %}
+                    </div>
                 </div>
             {% else %}
                 <p class="text-gray-400 italic">No messages yet. Start the conversation!</p>
             {% endfor %}
+
         </div>
 
         <div class="mt-6 max-w-4xl mx-auto bg-[#1E293B] p-4 rounded-xl flex items-center gap-4">

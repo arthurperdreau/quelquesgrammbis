@@ -7,18 +7,18 @@
         <div class="max-w-3xl mx-auto">
             {% for notif in notifs %}
                 {% if notif.type == 1 %}
-                    <a href="{{ path('post_show', {id: notif.notifPost.id}) }}">
-                        <div class="bg-gray-800 text-white p-5 rounded-2xl shadow-md hover:bg-gray-700 transition duration-200 flex flex-col gap-2 mb-6">
+                        <div class="relative bg-gray-800 text-white p-5 rounded-2xl shadow-md  flex flex-col gap-2 mb-6">
+                            <a href="{{ path('app_notification_seen', { id: notif.id }) }}" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-lg"><i class="bi bi-x-lg"></i></a>
                             <div class="flex items-center gap-3 flex-wrap">
                                 <i class="bi bi-pencil-square text-blue-400 text-xl"></i>
                                 <span><strong>{{ notif.notifPost.author.email }}</strong> posted something new.</span>
                             </div>
                             <span class="text-sm text-gray-400">{{ notif.createdAt|date('d/m/Y H:i') }}</span>
                         </div>
-                    </a>
 
                 {% elseif notif.type == 2 %}
-                    <div class="bg-gray-800 text-white p-5 rounded-2xl shadow-md flex flex-col gap-2 mb-6">
+                    <div class="relative bg-gray-800 text-white p-5 rounded-2xl shadow-md flex flex-col gap-2 mb-6">
+                        <a href="{{ path('app_notification_seen', { id: notif.id }) }}" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-lg"><i class="bi bi-x-lg"></i></a>
                         <div class="flex items-center gap-3 flex-wrap">
                             <i class="bi bi-heart-fill text-red-500 text-xl"></i>
                             <span><strong>{{ notif.notifLike.author.email }}</strong> liked your post <em>"{{ notif.notifLike.post.title }}"</em>.</span>
@@ -27,7 +27,8 @@
                     </div>
 
                 {% elseif notif.type == 3 %}
-                    <div class="bg-gray-800 text-white p-5 rounded-2xl shadow-md flex flex-col gap-2 mb-6">
+                    <div class="relative bg-gray-800 text-white p-5 rounded-2xl shadow-md flex flex-col gap-2 mb-6">
+                        <a href="{{ path('app_notification_seen', { id: notif.id }) }}" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-lg"><i class="bi bi-x-lg"></i></a>
                         <div class="flex items-center gap-3 flex-wrap">
                             <i class="bi bi-chat-dots-fill text-green-400 text-xl"></i>
                             <span><strong>{{ notif.notifMessage.author.ofUser.email }}</strong> sent you a message.</span>
@@ -36,15 +37,14 @@
                     </div>
 
                 {% elseif notif.type == 4 %}
-                    <a href="{{ path('app_myposts') }}">
-                        <div class="bg-gray-800 text-white p-5 rounded-2xl shadow-md hover:bg-gray-700 transition duration-200 flex flex-col gap-2 mb-6">
+                        <div class="relative bg-gray-800 text-white p-5 rounded-2xl shadow-md  flex flex-col gap-2 mb-6">
+                            <a href="{{ path('app_notification_seen', { id: notif.id }) }}" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-lg"><i class="bi bi-x-lg"></i></a>
                             <div class="flex items-center gap-3 flex-wrap">
                                 <i class="bi bi-person-plus-fill text-yellow-400 text-xl"></i>
                                 <span><strong>{{ notif.notifFriendRequest.sender.ofUser.email }}</strong> sent you a friend request.</span>
                             </div>
                             <span class="text-sm text-gray-400">{{ notif.createdAt|date('d/m/Y H:i') }}</span>
                         </div>
-                    </a>
                 {% endif %}
             {% endfor %}
         </div>
