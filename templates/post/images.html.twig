@@ -7,12 +7,6 @@
     </a>
     <div class="min-h-screen text-white p-6">
 
-        <!-- Bouton retour -->
-        <a href="{{ path('app_posts') }}" class="inline-flex items-center text-white text-2xl hover:text-blue-400 mb-6">
-            <i class="bi bi-arrow-left"></i>
-            <span class="ml-2">Retour</span>
-        </a>
-
         <!-- Galerie d'images -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             {% for image in post.images %}

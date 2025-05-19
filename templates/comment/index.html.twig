@@ -15,7 +15,17 @@
             <div class="flex items-start justify-between space-x-3 mb-4">
                 <div class="flex items-start space-x-3">
                     <div class="flex-shrink-0">
-                        <img class="w-8 h-8 rounded-full bg-gray-300" src="https://via.placeholder.com/32" alt="">
+
+
+                    {% if app.user.profile.picture %}
+                        <img src="{{ vich_uploader_asset(app.user.profile.picture, 'imageFile') }}"
+                             alt="Profile Picture"
+                             class="w-8 h-8 object-cover rounded-full border-4 shadow hover:scale-105 transition-transform">
+                    {% else %}
+                        <img src="/imagesSite/img.png"
+                             alt="Default Profile"
+                             class="w-8 h-8 object-cover rounded-full border-4 border-gray-500 shadow hover:scale-105 transition-transform">
+                    {% endif %}
                     </div>
                     <div>
                         <p>

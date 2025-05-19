@@ -18,6 +18,9 @@ final class AdminController extends AbstractController
     #[Route('/', name: 'app_admin')]
     public function index(UserRepository $userRepository, ChartBuilderInterface $chartBuilder, PostRepository $postRepository): Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
         if (!in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
             return $this->redirectToRoute('app_login');
         }
@@ -73,6 +76,9 @@ final class AdminController extends AbstractController
     #[Route('/promote/{id}', name: 'promote')]
     public function promote(User $user, EntityManagerInterface $manager): Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
         if (!in_array("ROLE_ADMIN",$this->getUser()->getRoles())  ) {
             return $this->redirectToRoute('app_login');
         }
@@ -87,6 +93,9 @@ final class AdminController extends AbstractController
     #[Route('/demote/{id}', name: 'demote')]
     public function demote(User $user, EntityManagerInterface $manager): Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
         if (!in_array("ROLE_ADMIN",$this->getUser()->getRoles())  ) {
             return $this->redirectToRoute('app_login');
         }
